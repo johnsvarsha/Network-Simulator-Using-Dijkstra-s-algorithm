@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Network Routing Simulator | Dijkstra's Algorithm</title>
+  
+  <!-- Google Fonts: Inter & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Vis-network Library for Graph Visualization -->
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  
+  <!-- Application Styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Landing Page Cover -->
+  <div id="landing-page" class="landing-page">
+    <div class="landing-container">
+      <div class="landing-header">
+        <div class="landing-icon">
+          <i class="fa-solid fa-network-wired" style="color: var(--accent-cyan); font-size: 3rem;"></i>
+        </div>
+        <h1 class="landing-title">SMART NETWORK ROUTING SIMULATOR</h1>
+      </div>
+      <h2 class="landing-subtitle">USING DIJKSTRA'S ALGORITHM</h2>
+      <div class="developer-name">JOHNS VARSHA J.</div>
+
+      <div class="particles-container">
+        <span class="particle particle-1"></span>
+        <span class="particle particle-2"></span>
+        <span class="particle particle-3"></span>
+        <span class="particle particle-4"></span>
+        <span class="particle particle-5"></span>
+        <span class="particle particle-6"></span>
+        <span class="particle particle-7"></span>
+        <span class="particle particle-8"></span>
+        <span class="particle particle-9"></span>
+        <span class="particle particle-10"></span>
+        <span class="particle particle-11"></span>
+        <span class="particle particle-12"></span>
+        <span class="particle particle-13"></span>
+        <span class="particle particle-14"></span>
+        <span class="particle particle-15"></span>
+      </div>
+
+      <div class="glowing-connection">
+        <div class="gl-connector"></div>
+      </div>
+
+      <button id="enter-simulator-btn" class="enter-simulator-btn">ENTER SIMULATOR</button>
+
+      <footer class="landing-footer">
+        Computer Networks Mini Project
+      </footer>
+    </div>
+  </div>
+
+  <!-- Ambient Gradient Orbs for Glassmorphism -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Main Container -->
+  <div class="app-container">
+    
+    <!-- 1. Header Section -->
+    <header class="app-header glass-card">
+      <div class="header-left">
+        <div class="brand-logo">
+          <i class="fa-solid fa-network-wired"></i>
+        </div>
+        <div class="header-text">
+          <h1 class="project-title">Smart Network Routing Simulator</h1>
+          <p class="project-subtitle">Interactive Shortest Path First (SPF) Simulation via Dijkstra's Algorithm & OSPF Metrics</p>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <!-- Live Network Status Indicator -->
+        <div class="status-indicator" id="network-status-badge">
+          <span class="status-dot"></span>
+          <span class="status-label" id="network-status-text">Network Idle</span>
+        </div>
+
+        <!-- Router Search Box -->
+        <div class="search-router-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="router-search-input" placeholder="Search router (e.g. Router A)..." autocomplete="off" />
+          <button id="router-search-clear" class="btn-icon hidden" title="Clear search"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Dark / Light Mode Toggle -->
+        <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon moon-icon"></i>
+          <i class="fa-solid fa-sun sun-icon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. Main Dashboard Grid -->
+    <main class="dashboard-grid">
+      
+      <!-- LEFT COLUMN: Control Panel & Actions -->
+      <aside class="dashboard-sidebar glass-card">
+        <div class="panel-section-header">
+          <div class="header-with-icon">
+            <i class="fa-solid fa-sliders text-cyan"></i>
+            <h2>Control Panel</h2>
+          </div>
+          <span class="badge-pill">Topology Controls</span>
+        </div>
+
+        <!-- Topology Manipulation Buttons -->
+        <div class="control-actions-group">
+          <button id="btn-add-router" class="btn btn-secondary">
+            <i class="fa-solid fa-circle-plus"></i> Add Router
+          </button>
+          <button id="btn-connect-routers" class="btn btn-secondary">
+            <i class="fa-solid fa-link"></i> Connect Routers
+          </button>
+          <button id="btn-sample-network" class="btn btn-secondary">
+            <i class="fa-solid fa-diagram-project"></i> Sample Network
+          </button>
+          <button id="btn-random-network" class="btn btn-secondary">
+            <i class="fa-solid fa-dice"></i> Random Network
+          </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Simulation Tools -->
+        <div class="panel-section-header">
+          <div class="header-with-icon">
+            <i class="fa-solid fa-bolt-lightning text-amber"></i>
+            <h2>Simulation Lab</h2>
+          </div>
+          <span class="badge-pill pulse">Live</span>
+        </div>
+
+        <div class="control-actions-group">
+          <button id="btn-simulate-traffic" class="btn btn-warning">
+            <i class="fa-solid fa-wave-square"></i> Simulate Traffic
+          </button>
+          <button id="btn-simulate-failure" class="btn btn-danger">
+            <i class="fa-solid fa-triangle-exclamation"></i> Simulate Link Failure
+          </button>
+          <button id="btn-restore-links" class="btn btn-secondary">
+            <i class="fa-solid fa-shield-halved"></i> Restore Failed Links
+          </button>
+          <button id="btn-reset-network" class="btn btn-outline-danger">
+            <i class="fa-solid fa-rotate-right"></i> Reset Network
+          </button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Export & View Actions -->
+        <div class="control-actions-group">
+          <button id="btn-export-report" class="btn btn-primary">
+            <i class="fa-solid fa-file-export"></i> Export Report
+          </button>
+          <div class="dual-btn-row">
+            <button id="btn-fit-canvas" class="btn btn-secondary btn-sm" title="Fit Network to Screen">
+              <i class="fa-solid fa-expand"></i> Fit View
+            </button>
+            <button id="btn-toggle-physics" class="btn btn-secondary btn-sm" title="Toggle Force-Directed Physics">
+              <i class="fa-solid fa-atom"></i> Physics: <span id="physics-status">ON</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Traffic State Legend -->
+        <div class="traffic-legend-box">
+          <div class="legend-title"><i class="fa-solid fa-layer-group"></i> Link Traffic States</div>
+          <div class="legend-items">
+            <span class="legend-item"><span class="color-dot dot-green"></span> Low</span>
+            <span class="legend-item"><span class="color-dot dot-yellow"></span> Medium</span>
+            <span class="legend-item"><span class="color-dot dot-red"></span> High</span>
+            <span class="legend-item"><span class="color-dot dot-dashed"></span> Failed</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER COLUMN: Visualization Canvas & Route Finder -->
+      <section class="dashboard-center">
+        
+        <!-- Route Finder Bar -->
+        <div class="route-finder-bar glass-card">
+          <div class="route-select-wrapper">
+            <label for="select-source-router">
+              <i class="fa-solid fa-location-arrow text-cyan"></i> Source:
+            </label>
+            <select id="select-source-router" class="custom-select">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="route-arrow-divider">
+            <i class="fa-solid fa-arrow-right-long"></i>
+          </div>
+
+          <div class="route-select-wrapper">
+            <label for="select-dest-router">
+              <i class="fa-solid fa-bullseye text-emerald"></i> Destination:
+            </label>
+            <select id="select-dest-router" class="custom-select">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="route-action-buttons">
+            <button id="btn-find-path" class="btn btn-success">
+              <i class="fa-solid fa-route"></i> Find Shortest Path
+            </button>
+            <button id="btn-animate-packet" class="btn btn-cyan" title="Transmit Packet across shortest path">
+              <i class="fa-solid fa-paper-plane"></i> Send Packet 📦
+            </button>
+          </div>
+        </div>
+
+        <!-- Network Canvas Area -->
+        <div class="canvas-container glass-card" id="network-canvas-wrapper">
+          <div id="network-canvas"></div>
+
+          <!-- Canvas Floating Controls Overlay -->
+          <div class="canvas-floating-controls">
+            <button id="btn-zoom-in" class="canvas-btn" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+            <button id="btn-zoom-out" class="canvas-btn" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+            <button id="btn-center-graph" class="canvas-btn" title="Center Topology"><i class="fa-solid fa-crosshairs"></i></button>
+          </div>
+
+          <!-- Loading Spinner Overlay -->
+          <div class="canvas-spinner-overlay hidden" id="canvas-spinner">
+            <div class="spinner"></div>
+            <p>Computing Dijkstra Shortest Path...</p>
+          </div>
+
+          <!-- Interactive Tip -->
+          <div class="canvas-watermark">
+            <span><i class="fa-solid fa-hand-pointer"></i> Drag nodes • Scroll to zoom • Hover router for telemetry</span>
+          </div>
+        </div>
+
+        <!-- Route Results Strip -->
+        <div class="results-strip glass-card" id="results-panel">
+          <div class="results-header">
+            <div class="results-title">
+              <i class="fa-solid fa-chart-line text-cyan"></i>
+              <h3>Routing Results & Telemetry</h3>
+            </div>
+            <div class="protocol-badge">
+              <i class="fa-solid fa-microchip"></i> <span id="protocol-used-text">Protocol: Dijkstra (SPF / OSPF Metric)</span>
+            </div>
+          </div>
+
+          <div class="results-grid">
+            <div class="result-metric-card">
+              <span class="metric-label">Shortest Path</span>
+              <div class="metric-value path-breadcrumbs" id="result-shortest-path">
+                <span class="empty-path">Select source and destination, then click Find Shortest Path</span>
+              </div>
+            </div>
+
+            <div class="result-metric-card">
+              <span class="metric-label">Total Metric Cost</span>
+              <div class="metric-value font-mono" id="result-total-cost">--</div>
+            </div>
+
+            <div class="result-metric-card">
+              <span class="metric-label">Hop Count</span>
+              <div class="metric-value font-mono" id="result-hops">--</div>
+            </div>
+
+            <div class="result-metric-card">
+              <span class="metric-label">Estimated Latency</span>
+              <div class="metric-value font-mono" id="result-delay">--</div>
+            </div>
+
+            <div class="result-metric-card">
+              <span class="metric-label">Algorithm Exec Time</span>
+              <div class="metric-value font-mono" id="result-exec-time">--</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: Network Statistics & Routing Table -->
+      <aside class="dashboard-sidebar glass-card">
+        
+        <!-- Network Statistics -->
+        <div class="panel-section-header">
+          <div class="header-with-icon">
+            <i class="fa-solid fa-server text-cyan"></i>
+            <h2>Network Statistics</h2>
+          </div>
+          <span class="badge-pill">Real-time</span>
+        </div>
+
+        <div class="stats-cards-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper cyan">
+              <i class="fa-solid fa-circle-nodes"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Total Routers</span>
+              <span class="stat-value" id="stat-total-routers">0</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper emerald">
+              <i class="fa-solid fa-timeline"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Total Links</span>
+              <span class="stat-value" id="stat-total-links">0</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper amber">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Avg Link Cost</span>
+              <span class="stat-value" id="stat-avg-cost">0</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper purple">
+              <i class="fa-solid fa-chart-pie"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Network Density</span>
+              <span class="stat-value" id="stat-density">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Dynamic Routing Table -->
+        <div class="panel-section-header">
+          <div class="header-with-icon">
+            <i class="fa-solid fa-table-list text-emerald"></i>
+            <h2>Routing Table</h2>
+          </div>
+          <div class="routing-table-filter">
+            <label for="table-source-filter">For:</label>
+            <select id="table-source-filter" class="custom-select custom-select-sm">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <div class="routing-table-container">
+          <table class="custom-table" id="routing-table">
+            <thead>
+              <tr>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Next Hop</th>
+                <th>Total Cost</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="routing-table-body">
+              <tr>
+                <td colspan="5" class="table-empty-message">No routes computed yet. Click Find Shortest Path.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </aside>
+
+    </main>
+
+    <!-- 3. Educational & Viva Ready Section (Collapsible) -->
+    <section class="educational-section glass-card">
+      <div class="accordion-header" id="accordion-toggle-btn">
+        <div class="accordion-title-group">
+          <div class="edu-badge"><i class="fa-solid fa-graduation-cap"></i> Academic & Viva Ready</div>
+          <h2>What is Dijkstra's Algorithm in Computer Networks?</h2>
+        </div>
+        <div class="accordion-icon">
+          <i class="fa-solid fa-chevron-down" id="accordion-chevron"></i>
+        </div>
+      </div>
+
+      <div class="accordion-content" id="accordion-content-panel">
+        
+        <div class="edu-grid">
+          <!-- Concept 1: Routing & Shortest Path -->
+          <div class="edu-card">
+            <div class="edu-card-header">
+              <i class="fa-solid fa-route text-cyan"></i>
+              <h3>Routing & Shortest Path First (SPF)</h3>
+            </div>
+            <p>
+              <strong>Routing</strong> is the process of selecting paths across a network to deliver packets from a sender to a receiver. 
+              In packet-switched networks (Layer 3), finding the <strong>Shortest Path</strong> minimizes propagation delay, packet loss, and link saturation by selecting paths with minimum accumulated link metrics (bandwidth, delay, reliability).
+            </p>
+          </div>
+
+          <!-- Concept 2: Routers & Network Layer -->
+          <div class="edu-card">
+            <div class="edu-card-header">
+              <i class="fa-solid fa-network-wired text-emerald"></i>
+              <h3>Routers & The OSI Network Layer (Layer 3)</h3>
+            </div>
+            <p>
+              A <strong>Router</strong> is an OSI Layer 3 device that inspects destination IP addresses and forwards packets using its internal <strong>Routing Table</strong>. 
+              Routers run routing protocols (like OSPF) to dynamically share topology maps (Link-State Advertisements) and calculate optimum next hops.
+            </p>
+          </div>
+
+          <!-- Concept 3: OSPF Protocol -->
+          <div class="edu-card">
+            <div class="edu-card-header">
+              <i class="fa-solid fa-satellite-dish text-amber"></i>
+              <h3>OSPF Protocol (Open Shortest Path First)</h3>
+            </div>
+            <p>
+              <strong>OSPF</strong> is an interior gateway protocol (IGP) built directly on Dijkstra's SPF algorithm. Each OSPF router constructs a complete identical link-state database (LSDB) of the autonomous system and executes Dijkstra's algorithm with itself as the root to build the shortest-path forwarding tree.
+              <br/>
+              <code>OSPF Link Cost = Reference Bandwidth (100 Mbps) / Link Bandwidth</code>
+            </p>
+          </div>
+
+          <!-- Concept 4: Step-by-Step Algorithm -->
+          <div class="edu-card">
+            <div class="edu-card-header">
+              <i class="fa-solid fa-list-ol text-purple"></i>
+              <h3>Step-by-Step Dijkstra Algorithm Execution</h3>
+            </div>
+            <ol class="edu-steps-list">
+              <li><strong>Initialization:</strong> Set distance to source $d(source) = 0$, and for all other nodes $v$, $d(v) = \infty$. Mark all nodes unvisited.</li>
+              <li><strong>Select Minimum Node:</strong> From unvisited set, select node $u$ with minimum distance $d(u)$.</li>
+              <li><strong>Relaxation:</strong> For each unvisited neighbor $v$ of $u$, update:
+                <br/>
+                <code>if (d[u] + weight(u, v) &lt; d[v]) { d[v] = d[u] + weight(u, v); prev[v] = u; }</code>
+              </li>
+              <li><strong>Mark Visited:</strong> Move $u$ from unvisited to visited set. Visited nodes are never re-evaluated.</li>
+              <li><strong>Termination:</strong> Repeat until destination is visited or all reachable nodes are processed.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Viva Highlights Section -->
+        <div class="viva-summary-strip">
+          <div class="viva-item">
+            <span class="viva-tag">Time Complexity</span>
+            <div class="viva-desc">
+              <strong>O((V + E) log V)</strong> with Min-Heap / Priority Queue;<br/>
+              <strong>O(V²)</strong> with simple Adjacency Matrix.
+            </div>
+          </div>
+
+          <div class="viva-item">
+            <span class="viva-tag">Space Complexity</span>
+            <div class="viva-desc">
+              <strong>O(V + E)</strong> to store network graph adjacency list, distance array, and predecessor mapping.
+            </div>
+          </div>
+
+          <div class="viva-item">
+            <span class="viva-tag">Real-World Protocols</span>
+            <div class="viva-desc">
+              <strong>OSPF</strong> (RFC 2328), <strong>IS-IS</strong> (Intermediate System to Intermediate System), Google Maps routing, CDN traffic engineering.
+            </div>
+          </div>
+
+          <div class="viva-item">
+            <span class="viva-tag">Key Viva Question</span>
+            <div class="viva-desc">
+              <strong>Why doesn't Dijkstra work with negative weights?</strong> Greedy assumption assumes once a node is visited, its shortest distance is finalized. For negative cycles, use <strong>Bellman-Ford</strong>.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MODAL 1: Add Router Modal -->
+  <div class="modal-overlay hidden" id="modal-add-router">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-circle-plus text-cyan"></i>
+          <h3>Add New Router</h3>
+        </div>
+        <button class="modal-close-btn" id="modal-add-router-close">&times;</button>
+      </div>
+      <form id="form-add-router">
+        <div class="form-group">
+          <label for="input-router-id">Router Name / Identifier:</label>
+          <input type="text" id="input-router-id" placeholder="e.g. Router E or R5" required />
+          <span class="form-hint">Unique identifier for this routing node.</span>
+        </div>
+        <div class="form-group">
+          <label for="input-router-ip">IP Address (Optional):</label>
+          <input type="text" id="input-router-ip" placeholder="e.g. 192.168.1.5" />
+          <span class="form-hint">Simulated IPv4 router interface address.</span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="modal-add-router-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Router to Network</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Connect Routers Modal -->
+  <div class="modal-overlay hidden" id="modal-connect-routers">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-link text-emerald"></i>
+          <h3>Create Link Between Routers</h3>
+        </div>
+        <button class="modal-close-btn" id="modal-connect-close">&times;</button>
+      </div>
+      <form id="form-connect-routers">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="connect-node-1">First Router:</label>
+            <select id="connect-node-1" class="custom-select" required></select>
+          </div>
+          <div class="form-group">
+            <label for="connect-node-2">Second Router:</label>
+            <select id="connect-node-2" class="custom-select" required></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="input-link-cost">Metric Cost (Weight):</label>
+          <input type="number" id="input-link-cost" min="1" max="100" value="3" required />
+          <span class="form-hint">OSPF Link metric cost (lower is faster/preferred).</span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="modal-connect-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Connection</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Application Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
+

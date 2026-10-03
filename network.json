@@ -1,0 +1,51 @@
+{
+  "routers": [
+    {
+      "id": "A",
+      "ip": "192.168.1.1",
+      "status": "Active"
+    },
+    {
+      "id": "B",
+      "ip": "192.168.1.2",
+      "status": "Active"
+    },
+    {
+      "id": "C",
+      "ip": "192.168.1.3",
+      "status": "Active"
+    },
+    {
+      "id": "D",
+      "ip": "192.168.1.4",
+      "status": "Active"
+    }
+  ],
+  "links": [
+    {
+      "source": "A",
+      "target": "B",
+      "cost": 4
+    },
+    {
+      "source": "A",
+      "target": "C",
+      "cost": 2
+    },
+    {
+      "source": "B",
+      "target": "C",
+      "cost": 3
+    },
+    {
+      "source": "B",
+      "target": "D",
+      "cost": 1
+    },
+    {
+      "source": "C",
+      "target": "D",
+      "cost": 5
+    }
+  ]
+}
